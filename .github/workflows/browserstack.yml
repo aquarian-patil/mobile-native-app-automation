@@ -73,7 +73,7 @@ jobs:
       - name: Generate CTRF HTML Report
         if: always()
         run: |
-          node -e "const fs = require('fs'); const file = 'node_modules/ctrf-html-reporter/dist/reporter/.vitepress/config.ts'; let content = fs.readFileSync(file, 'utf8'); content = content.replace('export default defineConfig({', 'export default defineConfig({\n  base: \'/mobile-native-app-demo/\',').replace('title: \"CTCF HTML Reporter\"', 'title: \"CTRF HTML Reporter\"').replace(/sidebar:\s*\[[\s\S]*?\]\s*,/g, 'sidebar: false,'); fs.writeFileSync(file, content);"
+          node -e "const fs = require('fs'); const file = 'node_modules/ctrf-html-reporter/dist/reporter/.vitepress/config.ts'; let content = fs.readFileSync(file, 'utf8'); content = content.replace('export default defineConfig({', 'export default defineConfig({\n  base: \'/mobile-native-app-automation/\',').replace('title: \"CTCF HTML Reporter\"', 'title: \"CTRF HTML Reporter\"').replace(/sidebar:\s*\[[\s\S]*?\]\s*,/g, 'sidebar: false,'); fs.writeFileSync(file, content);"
           npx ctrf-html-reporter ctrf/ctrf-report.json
 
       - name: Upload HTML report
