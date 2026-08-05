@@ -23,8 +23,8 @@ describe('SauceLabs Demo App - Comprehensive E2E Scenarios', () => {
   it('should login successfully with valid credentials', async () => {
     try {
       // In a continuous session, we might still be on the login page.
-      const username = process.env.SAUCE_USERNAME || 'bob@example.com';
-      const password = process.env.SAUCE_PASSWORD || '10203040';
+      const username = process.env.SAUCE_USERNAME as string;
+      const password = process.env.SAUCE_PASSWORD as string;
       await SauceLoginPage.login(username, password);
       await driver.pause(2000);
 
