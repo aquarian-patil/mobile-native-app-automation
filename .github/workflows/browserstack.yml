@@ -64,6 +64,11 @@ jobs:
         if: always()
         run: npx ctrf merge ctrf
 
+      - name: Fix CTRF Merge Timestamps
+        if: always()
+        run: node scripts/fix-merged-ctrf.js
+
+
       - name: Publish CTRF Test Summary Results
         if: always()
         uses: ctrf-io/github-test-reporter@v1
