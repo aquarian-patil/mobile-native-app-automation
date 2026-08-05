@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# WebdriverIO and Appium Logs
+logs/
+log/
+*.log
+
+# Automation Output & Reporting
+ctrf/
+ctrf-html-report/
+email-body.html
+
+# Dynamically Generated App Configs
+apps.json
+sauce.json
+
+# Local App Binaries (if any were downloaded locally)
+apps/
+*.apk
+*.ipa
+*.app
