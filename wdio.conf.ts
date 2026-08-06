@@ -72,6 +72,26 @@ export const config: WebdriverIO.Config = {
    */
   /**
    * Gets executed after a worker process has exited.
+   */
+  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+    if (error) {
+      // Take screenshot on failure
+      const screenshot = await browser.takeScreenshot();
+      const dir = path.join(__dirname, 'ctrf', 'screenshots');
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      const safeName = test.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      fs.writeFileSync(path.join(dir, `${safeName}.png`), screenshot, 'base64');
+      
+      // Print BrowserStack Session Link
+      if (browser.sessionId) {
+        console.log(`\n🔗 BrowserStack Session (Video & Logs): https://app-automate.browserstack.com/dashboard/v2/builds/search?query=${browser.sessionId}\n`);
+      }
+    }
+  },
+  /**
+   * Gets executed after a worker process has exited.
    * @param  {String} cid      capability id (e.g 0-0)
    * @param  {Number} exitCode 0 - success, 1 - fail
    * @param  {Array.<String>} specs    specs to be run in the worker process

@@ -69,11 +69,9 @@ jobs:
         run: node scripts/fix-merged-ctrf.js
 
 
-      - name: Publish CTRF Test Summary Results
+      - name: Generate Custom GitHub Actions Summary
         if: always()
-        uses: ctrf-io/github-test-reporter@v1
-        with:
-          report-path: ctrf/ctrf-report.json
+        run: node scripts/generate-github-summary.js
 
       - name: Generate CTRF HTML Report
         if: always()
