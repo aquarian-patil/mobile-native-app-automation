@@ -27,23 +27,36 @@ try {
 
     // Extract platform from the environment extra info if available
     let platform = '';
+    let sessionId = '';
     if (ctrfData.results.environment && ctrfData.results.environment.extra) {
       platform = ctrfData.results.environment.extra.platformName || '';
+      sessionId = ctrfData.results.environment.extra.sessionId || '';
       
-      // Inject BrowserStack Link into the visual dashboard
-      const sessionId = ctrfData.results.environment.extra.sessionId;
-      if (sessionId) {
-        ctrfData.results.environment.extra.browserStackDashboard = `https://app-automate.browserstack.com/dashboard/v2/builds/search?query=${sessionId}`;
+      // Remove the overflowing property if it exists from a previous run
+      if (ctrfData.results.environment.extra.browserStackDashboard) {
+        delete ctrfData.results.environment.extra.browserStackDashboard;
       }
     }
 
     const prefix = platform ? `[${capitalizedApp} - ${platform}]` : `[${capitalizedApp}]`;
 
-    // Update test names
+    // Update test names and inject clickable links
     if (ctrfData.results && ctrfData.results.tests) {
       ctrfData.results.tests.forEach((test) => {
         if (!test.name.startsWith('[')) {
           test.name = `${prefix} ${test.name}`;
+        }
+        
+        // Add a clickable BrowserStack link directly to each test case
+        if (sessionId) {
+          if (!test.links) test.links = [];
+          // Avoid duplicates if script runs twice
+          if (!test.links.some(l => l.name === 'BrowserStack Video & Logs')) {
+            test.links.push({
+              name: 'BrowserStack Video & Logs',
+              url: `https://app-automate.browserstack.com/dashboard/v2/builds/search?query=${sessionId}`
+            });
+          }
         }
       });
     }
