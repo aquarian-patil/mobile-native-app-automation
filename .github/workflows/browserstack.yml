@@ -87,13 +87,11 @@ jobs:
           path: .ctrf/report/
           retention-days: 30
 
-      - name: Deploy CTRF report to GitHub Pages
+      - name: Upload GitHub Pages Artifact
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: .ctrf/report
+          path: .ctrf/report
 
       - name: Generate HTML Email Body
         if: always()
@@ -111,3 +109,19 @@ jobs:
           to: ${{ secrets.NOTIFICATION_EMAILS }}
           from: Mobile QE Bot
           html_body: file://email-body.html
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: always()
+    needs: test
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
