@@ -29,6 +29,12 @@ try {
     let platform = '';
     if (ctrfData.results.environment && ctrfData.results.environment.extra) {
       platform = ctrfData.results.environment.extra.platformName || '';
+      
+      // Inject BrowserStack Link into the visual dashboard
+      const sessionId = ctrfData.results.environment.extra.sessionId;
+      if (sessionId) {
+        ctrfData.results.environment.extra.browserStackDashboard = `https://app-automate.browserstack.com/dashboard/v2/builds/search?query=${sessionId}`;
+      }
     }
 
     const prefix = platform ? `[${capitalizedApp} - ${platform}]` : `[${capitalizedApp}]`;

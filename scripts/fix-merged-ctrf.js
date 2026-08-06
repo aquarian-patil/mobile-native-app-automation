@@ -12,8 +12,11 @@ try {
     let maxStop = 0;
 
     tests.forEach(t => {
-      if (t.start && t.start < minStart) minStart = t.start;
-      if (t.stop && t.stop > maxStop) maxStop = t.stop;
+      // WDIO test timestamps are in seconds (10 digits), CTRF summary expects ms (13 digits)
+      const tStartMs = t.start ? (t.start < 10000000000 ? t.start * 1000 : t.start) : Infinity;
+      const tStopMs = t.stop ? (t.stop < 10000000000 ? t.stop * 1000 : t.stop) : 0;
+      if (tStartMs < minStart) minStart = tStartMs;
+      if (tStopMs > maxStop) maxStop = tStopMs;
     });
 
     if (minStart !== Infinity && maxStop !== 0 && data.results && data.results.summary) {
